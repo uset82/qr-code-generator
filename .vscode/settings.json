@@ -1,0 +1,27 @@
+{
+  "[typescript]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
+  "aider-composer.inlineDiff.enable": true,
+  "aider-composer.pythonPath": "C:\\Users\\uset\\AppData\\Local\\Programs\\Python\\Python312\\",
+  "deno.enablePaths": [
+    "supabase/functions"
+  ],
+  "deno.lint": true,
+  "deno.unstable": [
+    "bare-node-builtins",
+    "byonm",
+    "sloppy-imports",
+    "unsafe-proto",
+    "webgpu",
+    "broadcast-channel",
+    "worker-options",
+    "cron",
+    "kv",
+    "ffi",
+    "fs",
+    "http",
+    "net"
+  ],
+  "liveServer.settings.port": 5501
+}

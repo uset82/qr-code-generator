@@ -1,0 +1,60 @@
+prompts 
+
+
+ok now we have done with the  principal front end 
+we need another side "JUST TEACHER"
+
+we need to create the Teacher Management and Media Support so the teacher can upload the student kids images , video and songs 
+
+ ### 2. Teacher Management and Media Support 
+
+- Individual portfolios for each student
+- Organized storage structure
+- Automatic folder creation
+- Custom naming conventions
+
+- **Images**
+  - Quota: 3 images per student
+  - Supported formats: PNG, JPG, GIF
+  - Size limit: 10MB per image
+  - High-quality image optimization
+
+- **Videos**
+  - Quota: 1 video per student
+  - Maximum duration: 20 seconds
+  - Size limit: 50MB
+  - Automatic format validation
+
+- **Audio Recordings**
+  - Quota: 1 audio recording per student
+  - Maximum duration: 1 minute
+  - Size limit: 10MB
+  - Voice recording support
+
+
+
+
+secuencia de QR 
+
+
+
+
+so that when a teacher uploads media (pictures, videos, audio) for a specific student like Adrian or Jacob in the Teacher Portal, the generated QR code will link to a dedicated page that displays all media content for that particular student. This will create individual student portfolios accessible via QR codes, with each student having their own unique collection of uploaded media that parents can view by scanning the code.
+
+
+prompt 
+
+when the QR is display I want a second option , a URL site link to a dedicated page that displays all media content for that particular student.the QR code generator to include a second option that provides a direct URL link alongside the QR code. This URL will lead to the student's portfolio page where all their media content (images, videos, and audio) is displayed.
+
+
+
+the QR code and direct URL link not properly connecting to the student's media content.
+
+neither the QR nor the Option 2: Direct URL Link
+
+is connect to the  student files
+
+displays all media content for that particular student content / space  where unique collection of uploaded media that parents can view by scanning the code.
+
+understand ?
+

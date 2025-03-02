@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR Møllebakken Art Project</title>
+    <style>
+      body {
+        background-color: #1e1e2e;
+        color: white;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      #root {
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .test-container {
+        text-align: center;
+        padding: 40px;
+        border-radius: 8px;
+        background-color: #2a2a3a;
+        margin-top: 40px;
+      }
+      button {
+        padding: 10px 20px;
+        background-color: #ff4757;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 20px;
+      }
+      button:hover {
+        background-color: #ff6b81;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <!-- This div will be used by React when it loads -->
+      <div class="test-container">
+        <h1>QR Møllebakken Art Project</h1>
+        <p>This is a direct HTML test. If you can see this, your browser is correctly loading the HTML file.</p>
+        <p>The React application should replace this content when it loads successfully.</p>
+        <button onclick="testClick()">Test Button</button>
+      </div>
+    </div>
+    <script>
+      function testClick() {
+        alert('HTML button clicked! Basic JavaScript is working.');
+        console.log('Test button clicked');
+      }
+      
+      // Add a console message to check if JavaScript is running
+      console.log('index.html loaded successfully');
+    </script>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

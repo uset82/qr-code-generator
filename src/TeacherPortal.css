@@ -1,0 +1,554 @@
+/* TeacherPortal.css - Modern styling for the teacher portal */
+
+.teacher-portal {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.6rem 1.2rem;
+  background-color: var(--secondary-light);
+  color: var(--text-primary);
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-weight: 500;
+  margin-bottom: 2rem;
+  transition: var(--transition);
+}
+
+.back-button:hover {
+  background-color: var(--primary);
+  transform: translateX(-4px);
+}
+
+.portal-header {
+  background-color: var(--secondary);
+  padding: 2rem;
+  border-radius: var(--radius);
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.portal-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: var(--gradient-button);
+}
+
+.portal-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+
+.portal-header p {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.user-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--background-alt);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+}
+
+.logout-button {
+  background-color: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 500;
+}
+
+.logout-button:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+.portal-content {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+}
+
+@media (max-width: 992px) {
+  .portal-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+.student-selection {
+  background-color: var(--secondary);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  height: fit-content;
+}
+
+.student-selection h2 {
+  font-size: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.student-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.75rem;
+}
+
+.student-button {
+  background-color: var(--background-alt);
+  border: none;
+  border-radius: var(--radius);
+  padding: 1rem 0.75rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+  height: 100%;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.student-button:hover {
+  background-color: var(--secondary-light);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.student-button.selected {
+  background: var(--gradient-button);
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 87, 87, 0.2);
+}
+
+.upload-section {
+  background-color: var(--secondary);
+  padding: 2rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.upload-section h2 {
+  font-size: 1.8rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.quota-info {
+  background-color: var(--background-alt);
+  padding: 1.25rem;
+  border-radius: var(--radius);
+  margin-bottom: 2rem;
+}
+
+.quota-info h3 {
+  font-size: 1.2rem;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.quota-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.quota-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.quota-item span {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.quota-bar {
+  height: 8px;
+  background-color: var(--secondary-light);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.quota-fill {
+  height: 100%;
+  background: var(--gradient-button);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.media-type-selector {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.media-type-selector button {
+  flex: 1;
+  padding: 0.8rem;
+  border: none;
+  background-color: var(--background-alt);
+  color: var(--text-secondary);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 500;
+}
+
+.media-type-selector button.active {
+  background: var(--gradient-button);
+  color: var(--text-primary);
+  box-shadow: 0 4px 12px rgba(255, 87, 87, 0.2);
+}
+
+.media-type-selector button:hover:not(.active):not(:disabled) {
+  background-color: var(--secondary-light);
+  color: var(--text-primary);
+}
+
+.media-type-selector button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+input[type="text"],
+textarea {
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background-color: var(--background-alt);
+  color: var(--text-primary);
+  font-family: inherit;
+  transition: var(--transition);
+}
+
+input[type="text"]:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(255, 87, 87, 0.2);
+}
+
+input[type="file"] {
+  padding: 0.8rem;
+  border-radius: var(--radius);
+  border: 2px dashed var(--border);
+  background-color: var(--background-alt);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+input[type="file"]:hover {
+  border-color: var(--primary);
+}
+
+.file-requirements {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+}
+
+.upload-form button[type="submit"] {
+  background: var(--gradient-button);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  padding: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 1rem;
+  box-shadow: 0 4px 12px rgba(255, 87, 87, 0.2);
+}
+
+.upload-form button[type="submit"]:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 87, 87, 0.3);
+}
+
+.upload-form button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.progress-bar-container {
+  height: 8px;
+  background-color: var(--secondary-light);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.progress-bar {
+  height: 100%;
+  background: var(--gradient-button);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.message {
+  padding: 1rem;
+  border-radius: var(--radius);
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.message.error {
+  background-color: rgba(255, 87, 87, 0.15);
+  color: var(--primary);
+}
+
+.message.success {
+  background-color: rgba(46, 213, 115, 0.15);
+  color: #2ed573;
+}
+
+.message.info {
+  background-color: rgba(54, 162, 235, 0.15);
+  color: #36a2eb;
+}
+
+.student-artworks {
+  margin-top: 3rem;
+  border-top: 1px solid var(--border);
+  padding-top: 2rem;
+}
+
+.student-artworks h3 {
+  font-size: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.artwork-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.artwork-card {
+  background-color: var(--background-alt);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: var(--transition);
+}
+
+.artwork-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.artwork-card-header {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.artwork-card-header h3 {
+  font-size: 1.1rem;
+  margin: 0;
+  text-align: left;
+}
+
+.sync-status {
+  font-size: 0.7rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.sync-status.pending {
+  background-color: rgba(255, 159, 67, 0.15);
+  color: #ff9f43;
+}
+
+.sync-status.needs-sync {
+  background-color: rgba(255, 87, 87, 0.15);
+  color: var(--primary);
+}
+
+.artwork-media {
+  height: 200px;
+  background-color: var(--background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.artwork-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-container, .audio-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--background);
+}
+
+.video-container video {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.audio-container {
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.audio-icon {
+  font-size: 3rem;
+  color: var(--primary);
+}
+
+.audio-container audio {
+  width: 90%;
+}
+
+.media-error {
+  padding: 1rem;
+  color: var(--primary);
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.artwork-description {
+  padding: 1rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin: 0;
+  min-height: 60px;
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+.artwork-actions {
+  display: flex;
+  padding: 1rem;
+  gap: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.artwork-actions button {
+  flex: 1;
+  padding: 0.6rem;
+  border-radius: var(--radius);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.remove-button {
+  background-color: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+}
+
+.remove-button:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+.share-button {
+  background-color: var(--secondary-light);
+  border: none;
+  color: var(--text-primary);
+}
+
+.share-button:hover:not(:disabled) {
+  background-color: var(--primary);
+}
+
+.share-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .teacher-portal {
+    padding: 1rem;
+  }
+  
+  .portal-header {
+    padding: 1.5rem;
+  }
+  
+  .portal-header h1 {
+    font-size: 2rem;
+  }
+  
+  .upload-section {
+    padding: 1.5rem;
+  }
+  
+  .artwork-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .media-type-selector {
+    flex-direction: column;
+  }
+}
