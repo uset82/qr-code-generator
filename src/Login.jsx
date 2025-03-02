@@ -29,9 +29,14 @@ function Login() {
           throw new Error(result.error);
         }
         setMessage({ 
-          text: 'Registration successful! Please check your email for confirmation.', 
+          text: 'Registration successful! You can now sign in.', 
           type: 'success' 
         });
+        // Clear form after successful signup
+        setEmail('');
+        setPassword('');
+        // Switch to sign in mode
+        setIsSignUp(false);
       } else {
         result = await signIn(email, password);
         if (result.error) {
@@ -54,6 +59,8 @@ function Login() {
   const toggleAuthMode = () => {
     setIsSignUp(!isSignUp);
     setMessage({ text: '', type: '' });
+    setEmail('');
+    setPassword('');
   };
 
   return (
@@ -82,6 +89,7 @@ function Login() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
               disabled={loading}
+              required
             />
           </div>
           
@@ -94,7 +102,12 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
               disabled={loading}
+              required
+              minLength={6}
             />
+            <div className="password-requirements">
+              Password must be at least 6 characters long
+            </div>
           </div>
           
           <button 

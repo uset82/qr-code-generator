@@ -143,7 +143,7 @@ password_requirements = ""
 enable_signup = true
 # If enabled, a user will be required to confirm any email change on both the old, and new email
 # addresses. If disabled, only the new email is required to confirm.
-double_confirm_changes = true
+double_confirm_changes = false
 # If enabled, users need to confirm their email address before signing in.
 enable_confirmations = false
 # If enabled, users will need to reauthenticate or have logged in recently to change their password.
@@ -155,20 +155,32 @@ otp_length = 6
 # Number of seconds before the email OTP expires (defaults to 1 hour).
 otp_expiry = 3600
 
-# Use a production-ready SMTP server
-# [auth.email.smtp]
-# enabled = true
-# host = "smtp.sendgrid.net"
-# port = 587
-# user = "apikey"
-# pass = "env(SENDGRID_API_KEY)"
-# admin_email = "admin@email.com"
-# sender_name = "Admin"
+# Configure SMTP for sending emails
+[auth.email.smtp]
+enabled = false
+host = "smtp.gmail.com"
+port = 587
+user = "your-email@gmail.com"
+pass = "your-app-specific-password"
+admin_email = "your-email@gmail.com"
+sender_name = "Møllebakken QR Gallery"
 
-# Uncomment to customize email template
+# Email templates
 # [auth.email.template.invite]
-# subject = "You have been invited"
+# subject = "Welcome to Møllebakken QR Gallery"
 # content_path = "./supabase/templates/invite.html"
+#
+# [auth.email.template.confirmation]
+# subject = "Confirm Your Email - Møllebakken QR Gallery"
+# content_path = "./supabase/templates/confirmation.html"
+#
+# [auth.email.template.recovery]
+# subject = "Reset Your Password - Møllebakken QR Gallery"
+# content_path = "./supabase/templates/recovery.html"
+#
+# [auth.email.template.magic_link]
+# subject = "Magic Link - Møllebakken QR Gallery"
+# content_path = "./supabase/templates/magic_link.html"
 
 [auth.sms]
 # Allow/disallow new user signups via SMS to your project.
