@@ -75,7 +75,9 @@ const ShareArtwork = ({ artworkId }) => {
             const formattedArtwork = {
               ...data,
               student_name: data.students.name,
-              student_id: data.student_id
+              student_id: data.student_id,
+              file_type: data.type || 'image',
+              file_url: data.image_url
             };
             
             setArtwork(formattedArtwork);
@@ -172,44 +174,42 @@ const ShareArtwork = ({ artworkId }) => {
   const renderMedia = () => {
     if (!artwork) return null;
     
-    if (artwork.file_url && artwork.file_type) {
-      const fileType = artwork.file_type.toLowerCase();
-      
-      if (fileType.includes('image')) {
+    if (artwork.image_url) {
+      if (artwork.type === 'image') {
         return (
           <img 
-            src={artwork.file_url} 
+            src={artwork.image_url} 
             alt={artwork.title}
             className="artwork-media"
             onError={(e) => {
               e.target.style.display = 'none';
-              e.target.parentNode.innerHTML += '<div class="media-error">Image could not be loaded</div>';
+              e.target.parentNode.innerHTML = '<div class="media-error">Image could not be loaded</div>';
             }}
           />
         );
-      } else if (fileType.includes('video')) {
+      } else if (artwork.type === 'video') {
         return (
           <video 
-            src={artwork.file_url}
+            src={artwork.image_url}
             controls
             className="artwork-media"
             onError={(e) => {
               e.target.style.display = 'none';
-              e.target.parentNode.innerHTML += '<div class="media-error">Video could not be loaded</div>';
+              e.target.parentNode.innerHTML = '<div class="media-error">Video could not be loaded</div>';
             }}
           />
         );
-      } else if (fileType.includes('audio')) {
+      } else if (artwork.type === 'audio') {
         return (
           <div className="audio-container">
             <div className="audio-icon">♪</div>
             <audio 
-              src={artwork.file_url}
+              src={artwork.image_url}
               controls
               className="artwork-media"
               onError={(e) => {
                 e.target.style.display = 'none';
-                e.target.parentNode.innerHTML += '<div class="media-error">Audio could not be loaded</div>';
+                e.target.parentNode.innerHTML = '<div class="media-error">Audio could not be loaded</div>';
               }}
             />
           </div>

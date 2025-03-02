@@ -5,6 +5,7 @@ import { fetchAllArtworks, fetchArtworksByStudentId, withRetry } from './supabas
 import StudentList, { students } from './StudentList.jsx';
 import { useAuth } from './lib/AuthContext';
 import config from './config';
+import { supabase } from './lib/supabaseClient';
 
 // Fallback student artwork data for offline mode
 const generateFallbackData = (students) => {
@@ -134,16 +135,25 @@ function QRCodeGenerator() {
       setLoading(true);
       
       try {
-        const artworks = await withRetry(() => fetchArtworksByStudentId(selectedStudent.id), 2, 1000);
+        const { data, error } = await supabase
+          .from('artworks')
+          .select('*')
+          .eq('student_id', selectedStudent.folder_name)
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        // Transform the data to include proper URLs and types
+        const transformedData = data.map(artwork => ({
+          ...artwork,
+          file_type: artwork.type || 'image',
+          file_url: artwork.image_url
+        }));
+
+        setStudentArtworks(transformedData);
         
-        if (artworks && Array.isArray(artworks)) {
-          setStudentArtworks(artworks);
-          
-          // Cache artworks in localStorage for offline use
-          localStorage.setItem(`artworks_${selectedStudent.id}`, JSON.stringify(artworks));
-        } else {
-          setStudentArtworks([]);
-        }
+        // Cache artworks in localStorage for offline use
+        localStorage.setItem(`artworks_${selectedStudent.id}`, JSON.stringify(transformedData));
       } catch (err) {
         console.error('Error fetching student artworks:', err);
         setError('Failed to fetch student artworks. Please try again later.');
@@ -290,9 +300,9 @@ function QRCodeGenerator() {
   };
 
   const renderArtworkThumbnail = (artwork) => {
-    const isImage = artwork.file_type && artwork.file_type.includes('image');
-    const isVideo = artwork.file_type && artwork.file_type.includes('video');
-    const isAudio = artwork.file_type && artwork.file_type.includes('audio');
+    const isImage = artwork.type === 'image';
+    const isVideo = artwork.type === 'video';
+    const isAudio = artwork.type === 'audio';
     const isSelected = selectedArtwork && selectedArtwork.id === artwork.id;
     
     return (
@@ -304,11 +314,11 @@ function QRCodeGenerator() {
         <div className="thumbnail-media">
           {isImage && (
             <img 
-              src={artwork.file_url} 
+              src={artwork.image_url} 
               alt={artwork.title}
               onError={(e) => {
                 e.target.style.display = 'none';
-                e.target.parentNode.innerHTML += '<div class="media-error">!</div>';
+                e.target.parentNode.innerHTML = '<div class="media-error">!</div>';
               }}
             />
           )}

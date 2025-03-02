@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { fetchArtworksByStudentId, withRetry } from './supabaseClient';
 import { students } from './StudentList';
 import './StudentPortfolio.css';
+import { supabase } from './supabaseClient';
 
 function StudentPortfolio({ studentId }) {
   const [artworks, setArtworks] = useState([]);
@@ -105,43 +106,22 @@ function StudentPortfolio({ studentId }) {
         // Then try to fetch from Supabase if online
         if (!isOffline) {
           try {
-            const data = await withRetry(() => fetchArtworksByStudentId(decodedStudentId), 3, 1000);
-            
-            if (data && data.length > 0) {
-              console.log('Fetched artworks from Supabase:', data);
-              
-              // Merge with local data to ensure we have everything
-              // Use a Map to avoid duplicates based on ID
-              const artworkMap = new Map();
-              
-              // Add remote data first
-              data.forEach(artwork => {
-                artworkMap.set(artwork.id, {
-                  ...artwork,
-                  dataSource: 'remote'
-                });
-              });
-              
-              // Then add local data that doesn't exist in remote
-              loadedArtworks.forEach(artwork => {
-                if (!artworkMap.has(artwork.id)) {
-                  artworkMap.set(artwork.id, {
-                    ...artwork,
-                    dataSource: 'local'
-                  });
-                }
-              });
-              
-              // Convert Map back to array and sort by creation date (newest first)
-              loadedArtworks = Array.from(artworkMap.values())
-                .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-              
-              // Save the merged data back to local storage for future use
-              localStorage.setItem(`artworks_${decodedStudentId}`, JSON.stringify(loadedArtworks));
-            } else if (!foundInLocalStorage) {
-              // Only show an error if we didn't find anything in local storage
-              setError('No artworks found for this student');
-            }
+            const { data, error } = await supabase
+              .from('artworks')
+              .select('*')
+              .eq('student_id', decodedStudentId)
+              .order('created_at', { ascending: false });
+
+            if (error) throw error;
+
+            // Transform the data to include proper URLs and types
+            const transformedData = data.map(artwork => ({
+              ...artwork,
+              file_type: artwork.type || 'image', // Ensure we have a file type
+              file_url: artwork.image_url // Use the stored URL
+            }));
+
+            setArtworks(transformedData);
           } catch (remoteError) {
             console.error('Error fetching from Supabase:', remoteError);
             
@@ -251,8 +231,8 @@ function StudentPortfolio({ studentId }) {
                           alt={artwork.title}
                           className="artwork-media"
                           onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f0f0f0'/%3E%3Cpath d='M30,30 L70,70 M30,70 L70,30' stroke='%23cccccc' stroke-width='8'/%3E%3C/svg%3E";
+                            e.target.style.display = 'none';
+                            e.target.parentNode.innerHTML = '<div class="media-error">Image could not be loaded</div>';
                           }}
                         />
                       )}
@@ -262,13 +242,8 @@ function StudentPortfolio({ studentId }) {
                           className="artwork-media"
                           controls
                           onError={(e) => {
-                            e.target.onerror = null;
-                            // Replace with error element
-                            const parent = e.target.parentNode;
-                            const errorEl = document.createElement('div');
-                            errorEl.className = 'media-error';
-                            errorEl.innerHTML = "Video unavailable";
-                            parent.replaceChild(errorEl, e.target);
+                            e.target.style.display = 'none';
+                            e.target.parentNode.innerHTML = '<div class="media-error">Video could not be loaded</div>';
                           }}
                         />
                       )}
@@ -280,9 +255,8 @@ function StudentPortfolio({ studentId }) {
                             className="artwork-media"
                             controls
                             onError={(e) => {
-                              e.target.onerror = null;
-                              // Replace with error element
-                              e.target.parentNode.innerHTML = "<div class='media-error'>Audio unavailable</div>";
+                              e.target.style.display = 'none';
+                              e.target.parentNode.innerHTML = '<div class="media-error">Audio could not be loaded</div>';
                             }}
                           />
                         </div>

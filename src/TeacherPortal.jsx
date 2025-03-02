@@ -26,7 +26,7 @@ function TeacherPortal() {
   // Fetch student's existing artworks when a student is selected
   useEffect(() => {
     if (selectedStudent) {
-      fetchStudentArtworks(selectedStudent.id);
+      fetchStudentArtworks(selectedStudent.folder_name);
     }
   }, [selectedStudent]);
 
@@ -254,188 +254,74 @@ function TeacherPortal() {
       const fileExt = file.name.split('.').pop();
       const safeTitle = title.toLowerCase().replace(/[^a-z0-9]/g, '-');
       const fileName = `${timestamp}-${safeTitle}.${fileExt}`;
-      const filePath = `students/${selectedStudent.id}/${mediaType}s/${fileName}`;
+      const filePath = `${selectedStudent.folder_name}/${mediaType}s/${fileName}`;
       
       // Create artwork ID that will be consistent across storage and database
-      const artworkId = `${selectedStudent.id}-${mediaType}-${timestamp}`;
+      const artworkId = `${selectedStudent.folder_name}-${mediaType}-${timestamp}`;
 
       setMessage({ text: 'Uploading file...', type: 'info' });
       
-      // First try to upload to Supabase Storage
-      let uploadSuccessful = false;
-      let publicUrl = '';
-      
-      try {
-        // Upload with retry logic
-        const uploadResult = await withRetry(async () => {
-          const result = await supabase.storage
-            .from('artworks')
-            .upload(filePath, file, {
-              cacheControl: '3600',
-              upsert: false
-            });
-            
-          if (result.error) throw result.error;
-          return result;
-        }, 3, 2000);
-        
-        if (uploadResult.error) throw uploadResult.error;
-        
-        setUploadProgress(50);
-        setMessage({ text: 'File uploaded, getting public URL...', type: 'info' });
-        
-        // Get public URL *after* successful upload
-        const { data: urlData } = await supabase.storage
-          .from('artworks')
-          .getPublicUrl(filePath);
-          
-        if (!urlData || !urlData.publicUrl) {
-          throw new Error('Failed to get public URL');
-        }
-        
-        publicUrl = urlData.publicUrl;
-        uploadSuccessful = true;
-        setUploadProgress(70);
-      } catch (storageError) {
-        console.error('Storage error:', storageError);
-        
-        // Create a local object URL as fallback and store file in IndexedDB
-        try {
-          setMessage({ text: 'Network issue detected. Creating local version...', type: 'info' });
-          const localUrl = URL.createObjectURL(file);
-          publicUrl = localUrl;
-          
-          // Store the file in local storage for offline use
-          // In a real app, you would use IndexedDB for binary data
-          // For now, we'll just use the object URL
-          setUploadProgress(30);
-          console.log('Using local object URL as fallback:', publicUrl);
-          
-          // Mark that we'll need to sync this later when online
-          localStorage.setItem(`pending_upload_${artworkId}`, JSON.stringify({
-            file_path: filePath,
-            timestamp: timestamp,
-            attempt_count: 0,
-            last_attempt: Date.now()
-          }));
-        } catch (localError) {
-          console.error('Local storage error:', localError);
-          throw new Error('Failed to create local version: ' + localError.message);
-        }
-      }
-      
-      setMessage({ text: 'Saving artwork information...', type: 'info' });
-      setUploadProgress(80);
-      
-      // Now create the database record
-      try {
-        const artworkData = {
-          id: artworkId,
-          title: title,
-          student: selectedStudent.name,
-          student_id: selectedStudent.id,
-          image_url: publicUrl,
-          file_path: uploadSuccessful ? filePath : '',
-          type: mediaType,
-          description: description,
-          created_at: new Date().toISOString(),
-          // Add extra metadata for better tracking
-          upload_status: uploadSuccessful ? 'complete' : 'local_only',
-          storage_location: uploadSuccessful ? 'supabase' : 'local',
-          needs_sync: !uploadSuccessful
-        };
-        
-        // Try to insert into Supabase
-        if (navigator.onLine) {
-          const { error: dbError } = await withRetry(async () => {
-            return await supabase
-              .from('artworks')
-              .insert([artworkData]);
-          }, 3, 1000);
-  
-          if (dbError) throw dbError;
-        } else {
-          throw new Error('Network offline, using local storage only');
-        }
-        
-        // Even if Supabase insert succeeds, store in local storage for redundancy
-        const localArtworks = JSON.parse(localStorage.getItem(`artworks_${selectedStudent.id}`) || '[]');
-        
-        // Check if already exists to avoid duplicates
-        const existingIndex = localArtworks.findIndex(a => a.id === artworkId);
-        if (existingIndex >= 0) {
-          localArtworks[existingIndex] = artworkData;
-        } else {
-          localArtworks.push(artworkData);
-        }
-        
-        localStorage.setItem(`artworks_${selectedStudent.id}`, JSON.stringify(localArtworks));
-        setUploadProgress(100);
-        
-      } catch (dbError) {
-        console.error('Database error:', dbError);
-        
-        // If database insert fails, ensure we have a local copy
-        const localArtworks = JSON.parse(localStorage.getItem(`artworks_${selectedStudent.id}`) || '[]');
-        
-        // Create artwork record for local storage
-        const localArtworkData = {
-          id: artworkId,
-          title: title,
-          student: selectedStudent.name,
-          student_id: selectedStudent.id,
-          image_url: publicUrl,
-          file_path: uploadSuccessful ? filePath : '',
-          type: mediaType,
-          description: description,
-          created_at: new Date().toISOString(),
-          upload_status: 'pending_db_sync',
-          storage_location: uploadSuccessful ? 'supabase' : 'local',
-          needs_sync: true
-        };
-        
-        // Check if already exists to avoid duplicates
-        const existingIndex = localArtworks.findIndex(a => a.id === artworkId);
-        if (existingIndex >= 0) {
-          localArtworks[existingIndex] = localArtworkData;
-        } else {
-          localArtworks.push(localArtworkData);
-        }
-        
-        localStorage.setItem(`artworks_${selectedStudent.id}`, JSON.stringify(localArtworks));
-        localStorage.setItem(`pending_db_sync_${artworkId}`, JSON.stringify({
-          timestamp: timestamp,
-          attempt_count: 0,
-          last_attempt: Date.now()
-        }));
-      }
+      // Upload to Supabase Storage
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('artworks')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
 
-      // Reset form and show success message
+      if (uploadError) throw uploadError;
+      
+      setUploadProgress(50);
+      setMessage({ text: 'File uploaded, getting public URL...', type: 'info' });
+      
+      // Get public URL
+      const { data: urlData } = await supabase.storage
+        .from('artworks')
+        .getPublicUrl(filePath);
+        
+      if (!urlData || !urlData.publicUrl) {
+        throw new Error('Failed to get public URL');
+      }
+      
+      const publicUrl = urlData.publicUrl;
+      setUploadProgress(70);
+      
+      // Create database record
+      const { error: dbError } = await supabase
+        .from('artworks')
+        .insert([{
+          id: artworkId,
+          title: title,
+          student: selectedStudent.name,
+          student_id: selectedStudent.folder_name,
+          image_url: publicUrl,
+          file_path: filePath,
+          type: mediaType,
+          description: description || '',
+          created_at: new Date().toISOString()
+        }]);
+
+      if (dbError) throw dbError;
+
+      setUploadProgress(100);
+      setMessage({ text: 'Upload successful!', type: 'success' });
+      
+      // Reset form
       setFile(null);
       setTitle('');
       setDescription('');
-      setUploadProgress(0);
       
-      const successMessage = uploadSuccessful 
-        ? 'Upload successful!' 
-        : 'Upload saved locally. Will sync when connection is restored.';
-        
-      setMessage({ 
-        text: successMessage, 
-        type: 'success' 
-      });
-      
-      // Refresh student artworks to update quota
-      fetchStudentArtworks(selectedStudent.id);
+      // Refresh student artworks
+      fetchStudentArtworks(selectedStudent.folder_name);
     } catch (error) {
       console.error('Error uploading:', error);
       setMessage({ 
         text: `Upload failed: ${error.message}. Please try again.`, 
         type: 'error' 
       });
-      setUploadProgress(0);
     } finally {
       setUploading(false);
+      setUploadProgress(0);
     }
   };
 
@@ -500,11 +386,11 @@ function TeacherPortal() {
 
       // Always update local storage to ensure UI consistency
       try {
-        const localArtworksString = localStorage.getItem(`artworks_${selectedStudent.id}`);
+        const localArtworksString = localStorage.getItem(`artworks_${selectedStudent.folder_name}`);
         if (localArtworksString) {
           const localArtworks = JSON.parse(localArtworksString);
           const updatedArtworks = localArtworks.filter(item => item.id !== artwork.id);
-          localStorage.setItem(`artworks_${selectedStudent.id}`, JSON.stringify(updatedArtworks));
+          localStorage.setItem(`artworks_${selectedStudent.folder_name}`, JSON.stringify(updatedArtworks));
           console.log('Successfully updated local storage');
         }
         
@@ -533,7 +419,7 @@ function TeacherPortal() {
       });
       
       // Refresh student artworks to ensure UI is up-to-date
-      fetchStudentArtworks(selectedStudent.id);
+      fetchStudentArtworks(selectedStudent.folder_name);
     } catch (error) {
       console.error('Error deleting artwork:', error);
       setMessage({ text: 'Failed to delete artwork. Please try again.', type: 'error' });
@@ -673,7 +559,7 @@ function TeacherPortal() {
             {students.map((student) => (
               <button
                 key={student.id}
-                className={`student-button ${selectedStudent?.id === student.id ? 'selected' : ''}`}
+                className={`student-button ${selectedStudent?.folder_name === student.folder_name ? 'selected' : ''}`}
                 onClick={() => setSelectedStudent(student)}
               >
                 {student.name}
