@@ -298,7 +298,8 @@ function TeacherPortal() {
           file_path: filePath,
           type: mediaType,
           description: description || '',
-          created_at: new Date().toISOString()
+          created_at: new Date().toISOString(),
+          created_by: user.id
         }]);
 
       if (dbError) throw dbError;

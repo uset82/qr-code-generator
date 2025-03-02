@@ -239,7 +239,8 @@ export async function uploadArtwork(artwork) {
             student_id: artwork.student_id,
             image_url: fileUrl,
             file_path: artwork.file_path || '',
-            type: artwork.type || 'image'
+            type: artwork.type || 'image',
+            created_by: artwork.created_by
           }
         ]);
       
