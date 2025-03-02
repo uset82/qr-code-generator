@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { Link } from 'react-router-dom';
-import { fetchAllArtworks, fetchArtworksByStudentId, withRetry } from './supabaseClient';
+import { supabase, withRetry } from './supabaseClient';
 import StudentList, { students } from './StudentList.jsx';
 import { useAuth } from './lib/AuthContext';
 import config from './config';
-import { supabase } from './lib/supabaseClient';
 
 // Fallback student artwork data for offline mode
 const generateFallbackData = (students) => {
@@ -72,7 +71,12 @@ function QRCodeGenerator() {
           studentsFromList.map(async (student) => {
             try {
               // Try to fetch student's artworks to get counts
-              const artworks = await withRetry(() => fetchArtworksByStudentId(student.id), 2, 1000);
+              const { data: artworks } = await withRetry(() => 
+                supabase
+                  .from('artworks')
+                  .select('*')
+                  .eq('student_id', student.id)
+              );
               
               studentInfo[student.id] = {
                 name: student.name,
