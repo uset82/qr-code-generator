@@ -23,7 +23,8 @@ export const students = [
 ].map(name => ({
   name,
   id: name.toLowerCase().replace(/\s+/g, '-'),
-  folderName: name.toLowerCase().replace(/\s+/g, '_')
+  folder_name: name.toLowerCase().replace(/\s+/g, '_'),
+  grade: '10'  // Default grade, can be updated as needed
 }));
 
 // Helper function to get a student by ID
