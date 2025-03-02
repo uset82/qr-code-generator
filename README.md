@@ -57,8 +57,8 @@ An interactive web application for teachers to manage student artwork and genera
 
 3. Create a `.env` file in the root directory with your Supabase credentials:
    ```
-   VITE_SUPABASE_URL=your-supabase-url
-   VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
+   VITE_SUPABASE_URL=@https://fjtxvccbhwefylggyzeh.supabase.co 
+   VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqdHh2Y2NiaHdlZnlsZ2d5emVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA4NjQ2NTksImV4cCI6MjA1NjQ0MDY1OX0.rNaTrLfTiVtDKo5OlqN39D7ApfkktwNQ3AmOhxr6eWU 
    ```
 
 4. Start the development server
@@ -88,9 +88,9 @@ An interactive web application for teachers to manage student artwork and genera
 When deploying to production, you must set the `VITE_APP_URL` environment variable to your actual domain to ensure QR codes work correctly:
 
 ```
-VITE_SUPABASE_URL=your-supabase-url
-VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
-VITE_APP_URL=https://your-actual-domain.com
+VITE_SUPABASE_URL=https://fjtxvccbhwefylggyzeh.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqdHh2Y2NiaHdlZnlsZ2d5emVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA4NjQ2NTksImV4cCI6MjA1NjQ0MDY1OX0.rNaTrLfTiVtDKo5OlqN39D7ApfkktwNQ3AmOhxr6eWU
+VITE_APP_URL=https://mollebakkenqr.netlify.app
 ```
 
 Without this setting, QR codes will use the browser's current URL, which won't work when scanned from other devices.
@@ -177,10 +177,9 @@ Update the student data in the application by modifying the `students` array in 
 ### Environment Variables
 Create a `.env` file with the following variables:
 ```
-VITE_SUPABASE_URL=your-supabase-url
-VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
-VITE_APP_TITLE=QR Code Generator
-VITE_APP_URL=https://your-actual-domain.com  # Required for QR codes to work on other devices
+VITE_SUPABASE_URL=https://fjtxvccbhwefylggyzeh.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqdHh2Y2NiaHdlZnlsZ2d5emVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA4NjQ2NTksImV4cCI6MjA1NjQ0MDY1OX0.rNaTrLfTiVtDKo5OlqN39D7ApfkktwNQ3AmOhxr6eWU
+VITE_APP_URL=https://mollebakkenqr.netlify.app
 ```
 
 ## 📱 Using the Application
