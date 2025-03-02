@@ -7,9 +7,9 @@ function createSafeFolderName(name) {
     .toLowerCase()
     .normalize('NFD')                 // Normalize special characters
     .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
-    .replace(/[^a-z0-9_]/g, '_')     // Replace any non-alphanumeric chars with underscore
-    .replace(/_+/g, '_')             // Replace multiple underscores with single
-    .replace(/^_|_$/g, '');          // Remove leading/trailing underscores
+    .replace(/[^a-z0-9-]/g, '-')     // Replace any non-alphanumeric chars with hyphen
+    .replace(/-+/g, '-')             // Replace multiple hyphens with single
+    .replace(/^-|-$/g, '');          // Remove leading/trailing hyphens
 }
 
 export const students = [
@@ -35,7 +35,7 @@ export const students = [
   name,
   id: name.toLowerCase().replace(/\s+/g, '-'),
   folder_name: createSafeFolderName(name),
-  grade: '10'  // Default grade, can be updated as needed
+  grade: '1'  // Match the grade in the database
 }));
 
 // Helper function to get a student by ID
