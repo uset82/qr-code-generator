@@ -552,3 +552,14 @@ input[type="file"]:hover {
     flex-direction: column;
   }
 }
+
+.loading-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  text-align: center;
+  padding: 2rem;
+}

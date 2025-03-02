@@ -8,6 +8,25 @@ import './TeacherPortal.css';
 function TeacherPortal() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, [user, navigate]);
+
+  // If not authenticated, show loading or redirect
+  if (!user) {
+    return (
+      <div className="teacher-portal">
+        <div className="loading-message">
+          Please log in to access the Teacher Portal...
+        </div>
+      </div>
+    );
+  }
+
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [mediaType, setMediaType] = useState('image');
   const [file, setFile] = useState(null);
@@ -215,6 +234,12 @@ function TeacherPortal() {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!user) {
+      setMessage({ text: 'Please log in to upload files', type: 'error' });
+      navigate('/login');
+      return;
+    }
 
     if (!selectedStudent) {
       setMessage({ text: 'Please select a student', type: 'error' });
