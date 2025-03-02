@@ -27,35 +27,26 @@ function StudentPortfolio({ studentId }) {
     };
   }, []);
 
-  // Helper function to safely decode student ID
+  // Helper function to safely decode URI component
   const safeDecodeURI = (encodedId) => {
     try {
       return decodeURIComponent(encodedId);
-    } catch (err) {
-      console.error('Error decoding URI:', err);
-      return encodedId; // Return the original if decoding fails
+    } catch (error) {
+      console.error('Error decoding URI:', error);
+      return encodedId;
     }
   };
 
-  // Get student info from the student list
   useEffect(() => {
-    if (!studentId) return;
-    
     const decodedStudentId = safeDecodeURI(studentId);
-    
-    // Try to find the student in the student list first
-    const student = students.find(s => s.id === decodedStudentId);
+    const student = students.find(s => s.folder_name === decodedStudentId);
     
     if (student) {
       setStudentInfo(student);
+      document.title = `${student.name}'s Portfolio - QR Gallery`;
     } else {
-      console.warn(`Student with ID ${decodedStudentId} not found in student list`);
-      // Create a placeholder student object with the ID
-      setStudentInfo({
-        id: decodedStudentId,
-        name: 'Unknown Student',
-        folderName: decodedStudentId
-      });
+      setError('Student not found');
+      setLoading(false);
     }
   }, [studentId]);
 

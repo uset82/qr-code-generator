@@ -75,24 +75,24 @@ function QRCodeGenerator() {
                 supabase
                   .from('artworks')
                   .select('*')
-                  .eq('student_id', student.id)
+                  .eq('student_id', student.folder_name)
               );
               
-              studentInfo[student.id] = {
+              studentInfo[student.folder_name] = {
                 name: student.name,
-                id: student.id,
+                id: student.folder_name,
                 artworkCount: artworks?.length || 0,
-                portfolioUrl: `/student/${student.id}`,
+                portfolioUrl: `/student/${encodeURIComponent(student.folder_name)}`,
                 hasArtwork: artworks?.length > 0
               };
             } catch (err) {
               console.warn(`Failed to fetch artworks for ${student.name}:`, err);
               // Still add student even if artwork fetch fails
-              studentInfo[student.id] = {
+              studentInfo[student.folder_name] = {
                 name: student.name,
-                id: student.id,
+                id: student.folder_name,
                 artworkCount: 0,
-                portfolioUrl: `/student/${student.id}`,
+                portfolioUrl: `/student/${encodeURIComponent(student.folder_name)}`,
                 hasArtwork: false,
                 fetchError: true
               };
