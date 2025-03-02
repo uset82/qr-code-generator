@@ -566,6 +566,7 @@ button:disabled {
   margin-bottom: 20px;
   border-radius: 4px;
   font-size: 14px;
+  line-height: 1.5;
 }
 
 .message.error {
@@ -577,7 +578,7 @@ button:disabled {
 .message.success {
   background-color: #DCFCE7;
   color: #166534;
-  border: 1px solid #A3E635;
+  border: 1px solid #86EFAC;
 }
 
 .message.info {
@@ -1690,4 +1691,37 @@ video.artwork-media, audio.artwork-media {
   .qr-display {
     padding: 1rem;
   }
+}
+
+.resend-button {
+  background: none;
+  border: none;
+  color: #4F46E5;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 4px 8px;
+  margin-top: 8px;
+  font-size: 0.9em;
+  display: block;
+}
+
+.resend-button:hover {
+  color: #4338CA;
+}
+
+.resend-button:disabled {
+  color: #9CA3AF;
+  cursor: not-allowed;
+}
+
+.password-requirements {
+  font-size: 0.8em;
+  color: #6B7280;
+  margin-top: 4px;
+}
+
+.message.warning {
+  background-color: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FCD34D;
 }
