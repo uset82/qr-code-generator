@@ -1,6 +1,17 @@
 // Student list for the QR Møllebakken Art Project
 // This is exported as a pure JS module for use in multiple components
 
+// Helper function to create storage-safe folder names
+function createSafeFolderName(name) {
+  return name
+    .toLowerCase()
+    .normalize('NFD')                 // Normalize special characters
+    .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+    .replace(/[^a-z0-9_]/g, '_')     // Replace any non-alphanumeric chars with underscore
+    .replace(/_+/g, '_')             // Replace multiple underscores with single
+    .replace(/^_|_$/g, '');          // Remove leading/trailing underscores
+}
+
 export const students = [
   'Adrian Årnes',
   'Aisha Adde',
@@ -23,7 +34,7 @@ export const students = [
 ].map(name => ({
   name,
   id: name.toLowerCase().replace(/\s+/g, '-'),
-  folder_name: name.toLowerCase().replace(/\s+/g, '_'),
+  folder_name: createSafeFolderName(name),
   grade: '10'  // Default grade, can be updated as needed
 }));
 
